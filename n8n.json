@@ -1,0 +1,227 @@
+{
+  "name": "AI Agent workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "85b5c530-2c13-4424-ab83-05979bc879a5",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        544
+      ],
+      "id": "99f7bb9e-f8c0-43ca-a9a8-a76634ac9611",
+      "name": "Output",
+      "notesInFlow": true,
+      "notes": "Double-click to open"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -272,
+        768
+      ],
+      "id": "b16482e8-0d48-4426-aa93-c3fee11dd3cd",
+      "name": "OpenAI Model",
+      "notesInFlow": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "738uCPnArcyzK6p9",
+          "name": "OpenAi account"
+        }
+      },
+      "notes": "Double-click to open"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sen \"BitAnalist\" adında, kurumsal düzeyde veri analizi yapan bir kıdemli Bitcoin stratejistisin. Görevin, kullanıcıdan gelen talepleri derinlemesine araştırmak ve piyasa gürültüsünü (noise) temizleyerek saf bilgiyi sunmaktır.\n\nÇalışma Prensiplerin:\n1. VERİ KAYNAKLARI: Her zaman Perplexity aracını kullanarak en güncel (son 24-48 saat) verileri sorgula.\n2. ANALİZ KAPSAMI: Analizini şu 4 sütun üzerine kur:\n   - Makro Ekonomi: (Fed kararları, enflasyon, global likidite).\n   - Kurumsal Hareketler: (ETF giriş/çıkışları, MicroStrategy vb. alımları).\n   - On-Chain Veriler: (Borsalardan çıkışlar, madenci hareketleri, balina aktivitesi).\n   - Duygu Analizi (Sentiment): Piyasadaki korku/açgözlülük durumu.\n3. TARZ: Ciddiyetten ödün verme, spekülasyondan kaçın. \"Yatırım tavsiyesi değildir\" uyarısını her zaman en sonda belirt.\n4. ÇIKTI FORMATI: Markdown kullanarak başlıklar, kısa bullet pointler ve bir \"Yönetici Özeti\" (Executive Summary) ile yanıt ver.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        544
+      ],
+      "id": "084d56aa-d157-4964-9073-b36d9d9589c5",
+      "name": "AI Summary Agent",
+      "notesInFlow": true,
+      "notes": "Double-click to open"
+    },
+    {
+      "parameters": {
+        "content": "### Double click here to see the results:",
+        "height": 240,
+        "width": 192,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        112,
+        464
+      ],
+      "id": "a4b7a69a-0db8-4b9b-a81d-fd83378043a3",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "sendTo": "<YOUR EMAIL ADDRESS>",
+        "subject": "Summary of BTC",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        544
+      ],
+      "id": "45625d0d-bf26-4379-9eed-7bbc8e5d87a5",
+      "name": "Send summary by email",
+      "webhookId": "093b04f1-5e78-4926-9863-1b100d6f2ead",
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6PNBB9JClEJHZhAT",
+          "name": "Gmail account 2"
+        }
+      },
+      "notes": "Double-click to open"
+    },
+    {
+      "parameters": {
+        "path": "dac7d8e6-5e7a-4fe6-b226-54f1ba87da95",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -544,
+        544
+      ],
+      "id": "ff228972-5828-4475-b40f-15e4d25efa9d",
+      "name": "Webhook",
+      "webhookId": "dac7d8e6-5e7a-4fe6-b226-54f1ba87da95"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "message": [
+            {
+              "content": "Bitcoin (BTC) ile ilgili son 24 saatteki en önemli gelişmeleri şu başlıklar altında araştır ve kaynak göstererek özetle: \n1. Spot ETF net akışları (BlackRock, Fidelity vb.).\n2. Fiyatı etkileyen makroekonomik haberler.\n3. Önemli on-chain veriler (Exchange inflow/outflow).\n4. Kripto odaklı regülasyon haberleri.\nLütfen sadece güvenilir kaynakları (CoinDesk, Cointelegraph, Bloomberg Crypto, Glassnode) kullan."
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        752
+      ],
+      "id": "67e7e783-0c44-4866-95c8-474efa47a043",
+      "name": "Message a model in Perplexity",
+      "credentials": {
+        "perplexityApi": {
+          "id": "Ya78etuBGZJDvVas",
+          "name": "Perplexity account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Summary Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Summary Agent": {
+      "main": [
+        [
+          {
+            "node": "Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output": {
+      "main": [
+        [
+          {
+            "node": "Send summary by email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Summary Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model in Perplexity": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Summary Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "availableInMCP": false
+  },
+  "versionId": "354a0880-a3eb-4478-9a1e-3dc159ad7d99",
+  "meta": {
+    "templateId": "ready-to-run-ai-workflow",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "42a253f835ec2306abb716dccf3577534f260821d04d4eaff83f7082686204bb"
+  },
+  "id": "5j8NIswOD2cSOtdu",
+  "tags": []
+}
